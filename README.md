@@ -2,7 +2,7 @@
 
 ### 基于 vLLM 与 TensorRT-LLM 的大模型推理加速引擎
 
-[![CI](https://github.com/your-org/llm-inference-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/llm-inference-engine/actions)
+[![CI](https://github.com/20230046zzln/llm-inference-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/20230046zzln/llm-inference-engine/actions)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
@@ -197,7 +197,7 @@ git add .
 git commit -m "feat: vLLM + TensorRT-LLM fused inference engine"
 git branch -M main
 # 3. 关联远端（替换为你的用户名/组织）
-git remote add origin git@github.com:your-org/llm-inference-engine.git
+git remote add origin git@github.com:20230046zzln/llm-inference-engine.git
 git push -u origin main
 ```
 

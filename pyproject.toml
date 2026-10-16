@@ -58,9 +58,9 @@ llm-serve = "engine.cli:app"
 llm-build = "engine.builder.build_cli:app"
 
 [project.urls]
-Homepage = "https://github.com/your-org/llm-inference-engine"
-Repository = "https://github.com/your-org/llm-inference-engine"
-Issues = "https://github.com/your-org/llm-inference-engine/issues"
+Homepage = "https://github.com/20230046zzln/llm-inference-engine"
+Repository = "https://github.com/20230046zzln/llm-inference-engine"
+Issues = "https://github.com/20230046zzln/llm-inference-engine/issues"
 
 [tool.setuptools.packages.find]
 include = ["engine*"]
