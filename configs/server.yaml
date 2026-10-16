@@ -1,0 +1,70 @@
+# =============================================================================
+# Serving endpoint configuration
+# =============================================================================
+server:
+  host: 0.0.0.0
+  port: 8000
+  api_keys: []            # empty = auth disabled; otherwise list of accepted keys
+  max_model_len: 8192
+  request_timeout_s: 120
+  enable_metrics: true
+
+# ---------------------------------------------------------------------------
+# Backend selection.
+#   mode: vllm | trtllm | hybrid
+# hybrid fuses the two engines: vLLM Continuous Batching drives scheduling,
+# TensorRT-LLM compiled engines serve prefill/decoder kernels, and a router
+# dispatches by request shape and SLA.
+# ---------------------------------------------------------------------------
+mode: hybrid
+
+model:
+  name_or_path: meta-llama/Llama-2-7b-hf
+  tokenizer: meta-llama/Llama-2-7b-hf
+  dtype: float16
+  trust_remote_code: false
+
+# TensorRT-LLM compiled engine (built via scripts/build_engine.py).
+trtllm:
+  engine_dir: /models/engines/llama2-7b-fp16-tp4
+  dtype: float16
+  quantization: fp16        # fp16 | int8_sq | int8_awq | fp8
+  max_batch_size: 256
+  max_input_len: 6144
+  max_output_len: 2048
+  kv_cache_free_gpu_mem_fraction: 0.9
+  enable_kv_cache_reuse: true
+  use_inflight_batching: true
+
+# vLLM engine used for the scheduling loop / Continuous Batching.
+vllm:
+  dtype: float16
+  gpu_memory_utilization: 0.9
+  max_num_seqs: 256
+  max_num_batched_tokens: 8192
+  enable_prefix_caching: true
+  enforce_eager: false
+
+# Multi-GPU: tensor parallel over NCCL ranks.
+parallel:
+  tensor_parallel_size: 4
+  pipeline_parallel_size: 1
+  backend: nccl
+  distributed_init_method: env://
+
+# Continuous Batching scheduler.
+scheduler:
+  policy: continuous         # continuous | static
+  max_num_running: 256
+  max_num_waiting: 4096
+  prefill_chunk_size: 2048
+  prefill_decode_mixed: true
+  scheduling_policy: fcfs    # fcfs | priority | latency_aware
+  long_prefill_threshold: 1024
+  target_ttft_ms: 500
+
+# Hybrid router.
+router:
+  strategy: latency_aware    # latency_aware | load_balance | fixed
+  trtllm_min_prefill_tokens: 512
+  spill_to_vllm_on_overload: true

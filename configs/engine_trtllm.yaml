@@ -1,0 +1,35 @@
+# TensorRT-LLM engine build config used by scripts/build_engine.py
+model:
+  name_or_path: meta-llama/Llama-2-7b-hf
+  model_type: llama          # llama | gpt | qwen | baichuan | chatglm
+
+build:
+  output_dir: /models/engines/llama2-7b-fp16-tp4
+  dtype: float16             # float16 | bfloat16 | float32
+  int8: false                # SmoothQuant / INT8 weight-activation
+  int8_awq: false
+  fp8: false
+  per_channel: true
+  per_token: true
+  smooth_quant_alpha: 0.5    # SmoothQuant smoothing factor
+  operator_fusion: true      # fuse attention / MLP / QKV projection
+  use_gemm_plugin: fp16      # fp16 gemm plugin (fused kernels)
+  use_gpt_attention_plugin: fp16
+  remove_input_padding: true
+  use_inflight_batching: true
+  max_batch_size: 256
+  max_input_len: 6144
+  max_output_len: 2048
+  max_num_tokens: 16384
+  builders_opt_level: 3
+  timing_cache: ./timing.cache
+
+parallel:
+  tensor_parallel_size: 4
+  pipeline_parallel_size: 1
+
+calibration:
+  enabled: false
+  dataset: cnn_dailymail      # used for SmoothQuant activation calibration
+  num_samples: 512
+  seq_len: 2048

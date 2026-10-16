@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-inference-engine"
+version = "0.1.0"
+description = "High-performance LLM serving engine that fuses vLLM Continuous Batching with TensorRT-LLM quantization for low-latency, high-throughput multi-GPU inference."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "llm-inference-engine Authors" }]
+keywords = [
+    "llm",
+    "inference",
+    "vllm",
+    "tensorrt-llm",
+    "serving",
+    "quantization",
+    "continuous-batching",
+    "tensor-parallel",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: C++",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Environment :: GPU :: NVIDIA CUDA",
+]
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "numpy>=1.24",
+    "torch>=2.2",
+    "transformers>=4.42",
+    "typer>=0.12",
+    "prometheus-client>=0.20",
+]
+
+[project.optional-dependencies]
+vllm = ["vllm>=0.5.0"]
+trtllm = ["tensorrt-llm==0.10.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+llm-serve = "engine.cli:app"
+llm-build = "engine.builder.build_cli:app"
+
+[project.urls]
+Homepage = "https://github.com/your-org/llm-inference-engine"
+Repository = "https://github.com/your-org/llm-inference-engine"
+Issues = "https://github.com/your-org/llm-inference-engine/issues"
+
+[tool.setuptools.packages.find]
+include = ["engine*"]
+exclude = ["csrc*", "tests*", "benchmarks*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = false

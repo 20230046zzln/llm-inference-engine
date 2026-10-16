@@ -1,0 +1,15 @@
+# vLLM baseline engine config
+model:
+  name_or_path: meta-llama/Llama-2-7b-hf
+
+vllm:
+  dtype: float16
+  tensor_parallel_size: 4
+  gpu_memory_utilization: 0.9
+  max_num_seqs: 256
+  max_num_batched_tokens: 8192
+  max_model_len: 8192
+  enable_prefix_caching: true
+  enforce_eager: false
+  quantization: null         # awq | gptq | squeezellm | null
+  disable_log_stats: false
